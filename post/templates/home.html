@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    <title>Home</title>
+</head>
+<body>
+    <div class="container my-4">
+        <h3>All Posts</h3>
+        <p><a class="btn btn-success" href="admin/add">Add Data</a></p>
+        {% for post in posts %}
+            <div class="card my-3">
+                <h5 class="card-header"> {{post.title}} </h5>
+                <div class="card-body">
+                    <p class="card-text">{{post.detail}}</p>
+                    <p>
+                        <a href="admin/update/{{post.id}}" class="btn btn-success">Update</a>
+                        <a onclick="return confirm('Are you sure you want to delete this post')" href="admin/delete/{{post.id}}" class="btn btn-danger">Delete</a>
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
