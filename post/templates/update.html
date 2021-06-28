@@ -11,30 +11,87 @@
 <body>
     <div class="container my-4">
         <h3>Update Post</h3>
-        <p><a class="btn btn-success" href="/">All Data</a></p>
+        <p><a class="btn btn-success" href="/admin">All Data</a></p>
         <div class="card my-3">
             <h5 class="card-header"> Update Post </h5>
             <div class="card-body">
-                {% if messages %}
-                    {% for msg in messages %}
-                        <p class="text-success">{{msg}}</p>
-                    {% endfor %}
-                {% endif %}
-                <form method="post" action="admin/update/{{post.id}}">
+                {% if success_message %}
+                    <p class="text-success">{{success_message}}</p>
+			    {% endif %}
+                
+                <form method = 'POST' enctype="multipart/form-data" action="{{post.id}}">
                     {% csrf_token %}
+
+                    
+
                     <table class="table table-bordered">
                         <tr>
-                            <th>Title</th>
+                            <th> <label for="id_title">Title</label> </th>
                             <td>
-                                <input value={{post.title}} type="text" name="title"class="form-control" />
+                                <input id="id_title" placeholder="Title" value="{{form.initial.title}}" type="text" name="title"/>
                             </td>
                         </tr>
                         <tr>
-                            <th>Details</th>
+                            <th><label for="id_detail">Details</label></th>
                             <td>
-                                <textarea class="form-control" name="detail" id="" cols="30" rows="5">{{post.detail}}</textarea>
+                                <textarea id="id_detail" placeholder="Description..." name="detail">
+                                    {{form.initial.detail}}
+                                </textarea>
                             </td>
                         </tr>
+                        <tr>
+                            <th><label for="id_logo">Logo</label></th>
+                            <td>
+                                <div id="id_logo_group">
+                                    <img src="{{form.initial.image.url}}" width="100" height="100" id="id_logo_display">
+                               
+                                    <input type="file" name="logo" id="id_logo_file" accept="image/*" onchange="readURL(this)">
+                                </div>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_state">Active</label></th>
+                            <td>
+                                {% if form.initial.state == 'Yes' %}
+                                    <input type="radio" id="Yes" name="state" value="Yes"checked>
+                                    <label for="Yes">Yes</label>
+                                    <input type="radio" id="No" name="state" value="No">
+                                    <label for="No">No</label> 
+                                {% else %}
+                                    <input type="radio" id="Yes" name="state" value="Yes">
+                                    <label for="Yes">Yes</label>
+                                    <input type="radio" id="No" name="state" value="No" checked>
+                                    <label for="No">No</label>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th><label for="id_category">Category</label></th>
+                            <td>
+                                {% if form.initial.category == 'Mobile' %}
+                                    <select name="category" id="category-select">
+                                        <option value="Mobile" selected>Mobile</option>
+                                        <option value="Web">Web</option>
+                                        <option value="Cloud">Cloud</option>
+                                    </select> 
+                                {% elif form.initial.category == 'Web' %}
+                                    <select name="category" id="category-select">
+                                        <option value="Mobile" selected>Mobile</option>
+                                        <option value="Web" selected>Web</option>
+                                        <option value="Cloud">Cloud</option>
+                                    </select>
+                                {% else %}
+                                    <select name="category" id="category-select">
+                                        <option value="Mobile" selected>Mobile</option>
+                                        <option value="Web">Web</option>
+                                        <option value="Cloud" selected>Cloud</option>
+                                    </select>
+                                {% endif %}
+                            </td>
+                        </tr>
+
                         <tr>
                             <td colspan="2">
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -46,4 +103,20 @@
         </div>
     </div>
 </body>
+
+<script type="text/javascript">
+	document.getElementById('id_logo_group').onclick = function(event){
+    	document.getElementById('id_logo_file').click();
+    };
+
+	function readURL(input){
+		var reader = new FileReader();
+		reader.onload = function (e) {
+            $('#id_logo_display')
+                .attr('src', e.target.result)
+        };
+		reader.readAsDataURL(input.files[0]);
+	}
+</script>
+
 </html>

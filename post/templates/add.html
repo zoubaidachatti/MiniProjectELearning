@@ -16,33 +16,46 @@
             <h5 class="card-header"> Add Post </h5>
             
             <div class="card-body">
-                {% if messages %}
-                    {% for msg in messages %}
-                        <p class="text-success">{{msg}}</p>
-                    {% endfor %}
-                {% endif %}
-                <form method="post" action="/add">
+                
+
+                <form method = 'POST' enctype="multipart/form-data" action="add">
                     {% csrf_token %}
                     <table class="table table-bordered">
+                        {% for field in upload_form %}
                         <tr>
-                            <th>Title</th>
+                            {% if field.label == 'State' %}
+                            <th>{{field.label}}</th>
                             <td>
-                                <input type="text" name="title"class="form-control" />
+                                <input type="radio" id="Yes" name="state" value="Yes">
+                                <label for="Yes">Yes</label>
+
+                                <input type="radio" id="No" name="state" value="No">
+                                <label for="No">No</label>
                             </td>
-                        </tr>
-                        <tr>
-                            <th>Details</th>
+
+                            {% elif field.label == 'Category' %}
+                            <th>{{field.label}}</th>
                             <td>
-                                <textarea class="form-control" name="detail" id="" cols="30" rows="10"></textarea>
+                                <select name="category" id="category-select">
+                                    <option value="">--Please choose an option--</option>
+                                    <option value="Mobile">Mobile</option>
+                                    <option value="Web">Web</option>
+                                    <option value="Cloud">Cloud</option>
+                                </select>
                             </td>
+                                
+                            {% else %}
+                                <th>{{field.label}}</th>
+                                <td>{{ field }}</td>
+                            {% endif %}
+                            
                         </tr>
-                        <tr>
-                            <td colspan="2">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </td>
-                        </tr>
+                        {% endfor %}
                     </table>
+                    <button type="submit" class="btn btn-lg btn-warning">Submit</button>
                 </form>
+
+               
             </div>
         </div>
     </div>
